@@ -1,0 +1,29 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "source": {
+        "include": [ 
+            "srv"
+        ],
+        "exclude": [ 
+            "srv/external"
+        ],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": {
+        "package": "package.json",
+        "recurse": true,
+        "destination": "jsDoc/${project}_doc",
+        "template": "jsDoc/customTemplate"
+    }
+}
