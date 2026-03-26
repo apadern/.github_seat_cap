@@ -1,9 +1,9 @@
 ---
-applyTo: '**'
+applyTo: '**/srv/**/*.js,**/gen/srv/**/*.js,**/db/**/*.js'
 ---
 
 ## Documentación
-**Descripción general**: Toda la documentación del código en los ficheros javascript propios del proyecto dentro de la carpeta `webapp/` se realizará mediante anotaciones JSDoc y comentarios inline donde sean necesarios, independientemente de la subcarpeta en la que se encuentren. Es necesario actualizar la documentación después de cada corrección o modificación en el código, actualizando la etiqueta `@memberof` con el valor de la etiqueta `@namespace` al inicio del archivo javascript.
+**Descripción general**: Toda la documentación del código en los ficheros JavaScript propios del backend SAP CAP se realizará mediante anotaciones JSDoc y comentarios inline cuando sean necesarios. Esta guía aplica a código en `srv/`, `srv/lib/`, `srv/handlers/` (si existe), `gen/srv/` y cualquier JavaScript propio relacionado con lógica CAP. Es necesario actualizar la documentación después de cada corrección o modificación en el código, actualizando la etiqueta `@memberof` con el valor de la etiqueta `@namespace` al inicio del archivo JavaScript.
 
 **Nota:** La librería `jsdoc` **no es obligatoria** en el repositorio. Si `jsdoc` no está instalada en el módulo, las instrucciones siguientes siguen siendo válidas si se usa `npx jsdoc` o si se instala `jsdoc` como dependencia de desarrollo. Más abajo se muestran ejemplos de ambos enfoques.
 
@@ -15,32 +15,32 @@ applyTo: '**'
   //English description part 1,
   //part 2
   ```
-- La documentación se aplica a **todos** los ficheros javascript propios del proyecto bajo `webapp/`, independientemente de la subcarpeta (`controller/`, `model/`, `utils/`, `helper/`, etc.), **excepto** los ficheros que sean librerías de terceros (vendor), los que estén dentro de la carpeta `test/` y el fichero `locate-reuse-libs.js`. Se consideran vendor aquellos ficheros que no han sido escritos por el equipo del proyecto; la forma más fiable de identificarlos es configurar `source.excludePattern` en `jsDocConf.json` para excluirlos.
-- Al inicio del archivo javascript, se añadirá un comentario con las etiquetas `@file`, `@namespace` y `@author`. La etiqueta `@namespace` será el nombre del controlador o en caso de js nombre de fichero y la etiqueta `@author` siempre será 'NTTData'. No usar las etiquetas `@name` ni `@lends` porque la plantilla para generar la documentación no las soporta y no se indexan correctamente en la documentación generada. En su lugar, usar `@namespace` a nivel de archivo y `@memberof` + `@method` a nivel de función para que cada función se indexe correctamente bajo el namespace del archivo.
+- La documentación se aplica a **todos** los ficheros JavaScript propios del backend CAP (por ejemplo en `srv/`, `srv/lib/`, `gen/srv/`), independientemente de la subcarpeta, **excepto** los ficheros de terceros (vendor), los que estén dentro de carpetas `test/`, ficheros `*.test.js`, snapshots y artefactos transitorios. Se consideran vendor aquellos ficheros no escritos por el equipo del proyecto; la forma más fiable de identificarlos es configurar `source.excludePattern` en `jsDocConf.json` para excluirlos.
+- Al inicio del archivo JavaScript, se añadirá un comentario con las etiquetas `@file`, `@namespace` y `@author`. La etiqueta `@namespace` será el nombre lógico del módulo CAP (normalmente nombre de fichero sin extensión o nombre del servicio/lib) y la etiqueta `@author` siempre será 'NTTData'. No usar las etiquetas `@lends`. Usar `@namespace` a nivel de archivo y `@memberof` + `@method` a nivel de función para que cada función se indexe correctamente bajo el namespace del archivo.
 
 Ejemplo:
   ```
   /**
-    * @file Controlador base del que heredan todos los controladores / Base controller for all controllers
-    * @namespace App
+    * @file Implementación de handlers del servicio de horas extra / Overtime service handlers implementation
+    * @namespace horasExtraService
     * @author NTTData
     */
   ```
 
 - Recomendación de nombres y etiquetas (mejor práctica):
   - `@file`: descripción clara y concisa del propósito del archivo.
-  - `@namespace`: se debe usar el mismo nombre para el namespace que el del controlador o fichero js para que la documentación se indexe correctamente. Por ejemplo, si el controlador se llama `App.controller.js`, el namespace será `App`. No añadir sufijos como `.controller` al namespace o la ruta del archivo para mejorar la lectura de la documentación generada.
-  - En cada bloque de función publique también las etiquetas `@name` y `@memberof` con el nombre completamente cualificado para evitar que JSDoc indexe la función en `Global`.
-    - Ejemplo para método de controlador (instancia):
+  - `@namespace`: se debe usar el mismo nombre para el namespace que el del fichero o módulo CAP para que la documentación se indexe correctamente. Por ejemplo, si el fichero se llama `horasExtraService.js`, el namespace será `horasExtraService`. No añadir rutas completas al namespace para mejorar la lectura de la documentación generada.
+  - En cada bloque de función publique al menos las etiquetas `@memberof` y `@method` con nombres consistentes para evitar que JSDoc indexe la función en `Global`.
+    - Ejemplo para función de servicio/lib:
       ```
       /**
-       * @memberof App
-       * @method validacionData
+       * @memberof horasExtraService
+       * @method validateOvertimePayload
        * @public
        */
       ```
 
-- Cada una de las funciones del controlador se comentará mediante anotaciones. Los comentarios solo se generarán antes de la declaración de la función; no se generarán automáticamente en medio de la misma.
+- Cada una de las funciones del servicio o librería se comentará mediante anotaciones. Los comentarios solo se generarán antes de la declaración de la función; no se generarán automáticamente en medio de la misma.
 Siempre se añadirán las etiquetas `@description`, `@memberof`, `@method`, `@author` y `@public`/`@private`. Si corresponde, también se añadirán las etiquetas `@async`, `@param`, `@returns` y `@throws`. 
   - Las etiquetas JSDoc bilingües (como `@description`, `@param`, `@returns`) que superen ~80 caracteres se dividirán en varias líneas usando el mismo patrón que los comentarios inline: primero las líneas en español y luego las líneas en inglés, usando ` /` al final de la última línea española como separador. Ejemplo:
     ```js
@@ -60,21 +60,21 @@ Siempre se añadirán las etiquetas `@description`, `@memberof`, `@method`, `@au
 Ejemplo de una función con parámetros de entrada y un valor de retorno:
   ```
   /**
-    * @description Valida que existen registros seleccionados en la tabla / Validates that there are selected records in the table
+    * @description Valida los datos de entrada para el cálculo de horas extra / Validates input payload for overtime calculation
     * 
-    * @memberof DetailDossier
-    * @method _validLengthTable
-    * @param {Object} oTable - Tabla de origen / Source table
+    * @memberof horasExtraLib
+    * @method _validateOvertimePayload
+    * @param {Object} oPayload - Datos de entrada / Input payload
     * @author NTTData
     * @returns {Boolean}
-    * @public
+    * @private
     */
   ```
 
-  - Si el desarrollador esta conforme se debe generar carpeta jsDoc si esta no existe ya a nivel de modulo (carpeta padre de webapp). En caso de tener que generarla porque el proyecto todavia no la tiene se deben seguir los siguientes pasos:
-    - Carpeta customTemplate - añadir esta carpeta dentro de jsDoc. Copiar únicamente los siguientes elementos desde `.github/others/UI5/customTemplate/`: `publish.js`, `tmpl/`, `static/` y `staticSAP/`. No copiar `node_modules/`, `README.md`, `CHANGELOG.md`, `fixtures/` ni otros ficheros del repositorio de la plantilla. 
-    - Fichero jsDocConf.json - copiar el fichero .github/others/UI5/jsDocConf.json dentro de la nueva carpeta jsDoc y sustituir el valor de "${project}" por el nombre del proyecto UI5.
-    - Instalar librería node `jsdoc` a nivel de carpeta módulo (carpeta padre de webapp) **(opcional)**, o usar `npx jsdoc` sin instalación global/local. Ejemplos:
+  - Si el desarrollador esta conforme se debe generar carpeta `jsDoc` si esta no existe ya a nivel de módulo CAP (carpeta que contiene `srv/`, `db/` y `package.json`). En caso de tener que generarla porque el proyecto todavía no la tiene se deben seguir los siguientes pasos:
+    - Carpeta customTemplate - añadir esta carpeta dentro de jsDoc. Copiar únicamente los siguientes elementos desde `.github/others/CAP/customTemplate/`: `publish.js`, `tmpl/`, `static/` y `staticSAP/`. No copiar `node_modules/`, `README.md`, `CHANGELOG.md`, `fixtures/` ni otros ficheros del repositorio de la plantilla. 
+    - Fichero jsDocConf.json - copiar el fichero `.github/others/CAP/jsDocConf.json` dentro de la nueva carpeta `jsDoc` y sustituir el valor de `${project}` por el nombre del proyecto CAP o módulo backend.
+    - Instalar librería node `jsdoc` a nivel de carpeta módulo CAP **(opcional)**, o usar `npx jsdoc` sin instalación global/local. Ejemplos:
 
       ```bash
       # instalar localmente como devDependency (opcional)
@@ -86,7 +86,7 @@ Ejemplo de una función con parámetros de entrada y un valor de retorno:
       # ejecutar binario local si está instalado
       ./node_modules/.bin/jsdoc -c jsDoc/jsDocConf.json
       ```
-    - Ejecutar JSDoc siempre desde la raíz del módulo (carpeta padre de webapp) para que las rutas relativas del `jsDoc/jsDocConf.json` y `node_modules` resuelvan correctamente. Ejemplo de comando a usar desde la raíz del módulo:
+    - Ejecutar JSDoc siempre desde la raíz del módulo CAP para que las rutas relativas del `jsDoc/jsDocConf.json` y `node_modules` resuelvan correctamente. Ejemplo de comando a usar desde la raíz del módulo:
       ```bash
       ./node_modules/.bin/jsdoc -c jsDoc/jsDocConf.json
       ```
@@ -96,10 +96,10 @@ Ejemplo de una función con parámetros de entrada y un valor de retorno:
         "docs": "node_modules/.bin/jsdoc -c jsDoc/jsDocConf.json"
       }
       ```
-    - Modificar apartado de modulo html5 dentro del mta.yaml a nivel de build-parameters -> commands añadiendo el comando `node_modules/.bin/jsdoc -c jsDoc/jsDocConf.json` entre `npm install` y el build. Si `npm install` no esta indicado como primer comando a ejecutar añadirlo para tener acceso a la libreria cuando se prepara el build.
-    - Para previsualizar localmente la documentación generada use un servidor estático desde la carpeta de salida del `jsDoc` (por ejemplo `jsDoc/<project>_doc/.../0.0.1/`) con `ui5 serve --open index.html`.
-    - Añadir al .gitignore la carpeta jsDoc/nombreProyecto_doc para evitar subir la documentación generada al repositorio.
+    - Modificar el apartado del módulo `srv` dentro del `mta.yaml`, a nivel de `build-parameters -> commands`, añadiendo el comando `node_modules/.bin/jsdoc -c jsDoc/jsDocConf.json` entre `npm install` y el build. Si `npm install` no está indicado como primer comando, añadirlo para tener acceso a la librería cuando se prepara el build.
+    - Para previsualizar localmente la documentación generada use un servidor estático desde la carpeta de salida del `jsDoc` (por ejemplo `jsDoc/<project>_doc/.../0.0.1/`) con cualquier servidor HTTP estático.
+    - Añadir al `.gitignore` la carpeta `jsDoc/nombreProyecto_doc` para evitar subir la documentación generada al repositorio.
 
   - Recomendaciones adicionales para el `jsDocConf.json`:
     - Asegúrese de configurar `source.includePattern` y `source.excludePattern` para evitar indexar librerías de terceros (vendor).
-    - Si observa entradas en `Global` tras generar la documentación, verifique que cada archivo contiene `@namespace` correctamente cualificados y que cada función documentada tiene `@name` + `@memberof` con los nombres completos.
+    - Si observa entradas en `Global` tras generar la documentación, verifique que cada archivo contiene `@namespace` correctamente cualificado y que cada función documentada tiene `@memberof` + `@method` con nombres consistentes.
