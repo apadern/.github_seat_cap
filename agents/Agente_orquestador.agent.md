@@ -1,14 +1,7 @@
 ---
 name: Agente_orquestador
 description: "Usa este agente cuando necesites coordinar un evolutivo SAPUI5 end-to-end: puede abarcar una vista nueva, la modificacion de vistas existentes o un conjunto de cambios transversales (UI, navegacion, logica y documentacion). Delega en subagentes especializados, mantiene un contexto compartido JSON, verifica gates de calidad y produce un reporte final con supuestos, TODOs y riesgos."
-tools:
-	- read_file
-	- file_search
-	- grep_search
-	- runSubagent
-	- apply_patch
-	- create_file
-	- run_in_terminal
+tools: vscode, execute, read, agent, browser, edit, search, web, '@cap-js/mcp-server/*', todo
 user-invocable: true
 
 ---

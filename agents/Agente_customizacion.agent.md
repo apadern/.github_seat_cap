@@ -1,15 +1,9 @@
 ---
 name: Agente_customizacion
 description: "Usa este agente cuando necesites crear o modificar artefactos de personalización de Copilot en este proyecto: agentes (.agent.md), instrucciones (.instructions.md), skills (SKILL.md) o prompts (.prompt.md). Aplica cuando quieras añadir un nuevo agente especializado, actualizar el alcance de uno existente, crear una nueva skill con su script de detección, definir instrucciones automáticas para el proyecto, o crear un prompt reutilizable."
-tools:
-  - read_file
-  - apply_patch
-  - create_file
-  - file_search
-  - grep_search
-  - run_in_terminal
 
 user-invocable: true
+tools: vscode, execute, read, agent, browser, edit, search, web, '@cap-js/mcp-server/*', todo
 ---
 
 # Agente 7 — Creación y Mantenimiento de Artefactos de Personalización Copilot

@@ -1,12 +1,7 @@
 ---
 name: Agente_documentacion
 description: "Usa este agente cuando necesites generar o actualizar documentación técnica en servicios SAP CAP (CDS y JavaScript): bloques JSDoc en handlers y librerías, comentarios inline, encabezados de archivo, documentación funcional y validación de cobertura de documentación."
-tools:
-  - read_file
-  - apply_patch
-  - create_file
-  - file_search
-  - run_in_terminal
+tools: vscode, execute, read, agent, browser, edit, search, web, '@cap-js/mcp-server/*', todo
 user-invocable: true
 ---
 
