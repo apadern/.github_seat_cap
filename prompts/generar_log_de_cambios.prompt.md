@@ -163,7 +163,7 @@ CAMBIOS  ← Heading1 existente, no se toca
 2. No crear bloque `Frontend` en ningún caso.
 
 ### Párrafo vacío entre subapartados
-Insertar un párrafo vacío (`w:p` sin estilo ni contenido) entre el `Heading2` y el primer `ListParagraph`, y otro al final del subapartado, replicando el patrón del documento existente.
+Insertar un único párrafo vacío (`w:p` sin estilo ni contenido) **antes** del `Heading2` (para separarlo del subapartado anterior) y otro al final del subapartado. **No** insertar párrafo vacío entre el `Heading2` y el primer `ListParagraph`.
 
 ### Modo seguro de escritura — obligatorio
 - No sobrescribir el fichero original en la primera escritura.

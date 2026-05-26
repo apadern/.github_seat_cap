@@ -57,6 +57,10 @@ Coordinar cambios funcionales SAPUI5 de extremo a extremo, descomponiendo la tar
 - Determinar si conviene delegar parte del flujo:
 	- Documentación CAP/JSDoc: `Agente_documentacion`.
 	- Personalizaciones de Copilot: `Agente_customizacion`.
+- **Preguntar al usuario sobre documentación** antes de planificar: *"¿Desea implementar la documentación completa del proyecto?"*. En función de la respuesta:
+	- **Sí** → invocar `Agente_documentacion` en **modo Completo** antes de cualquier otra tarea de documentación.
+	- **No** → invocar `Agente_documentacion` en **modo Incremental** solo sobre los archivos del evolutivo actual.
+	- No mezclar modo Completo e Incremental en la misma ejecución.
 
 ### 3. Ejecución
 - Aplicar cambios con impacto mínimo necesario.
@@ -88,6 +92,7 @@ Coordinar cambios funcionales SAPUI5 de extremo a extremo, descomponiendo la tar
 ## Checklist rápido
 - [ ] Instrucciones relevantes cargadas
 - [ ] Archivos impactados identificados
+- [ ] ¿Documentación completa del proyecto? (preguntar al usuario) → `Agente_documentacion` modo Completo / Incremental según respuesta
 - [ ] Cambios aplicados con mínimo alcance
 - [ ] Verificación de consistencia completada
 - [ ] Resumen final con riesgos/TODOs entregado
