@@ -460,7 +460,6 @@ module.exports = class ServiceMng {
      * @param {Object} db - Conexión HANA / HANA connection
      * @param {Object} connExternal - Conexión servicio externo / External service connection
      * @author NTTData
-     * @public
      */
     constructor(db, connExternal) {
         this.db = db;
@@ -474,7 +473,6 @@ module.exports = class ServiceMng {
      * @method beforeAllRequests
      * @param {Object} req - Objeto request de CAP / CAP request object
      * @author NTTData
-     * @public
      */
     beforeAllRequests(req) {
         return new Promise((resolve, reject) => {
@@ -499,7 +497,6 @@ module.exports = class ServiceMng {
      * @param {String} sId - Identificador / Identifier
      * @author NTTData
      * @returns {Object}
-     * @public
      */
     async getMyEntityData(sId) {
         // Acceder a entidades usando cds.entities (recomendado por cap.instructions.md) /

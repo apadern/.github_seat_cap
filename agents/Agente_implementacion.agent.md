@@ -195,7 +195,7 @@ type WORK_ORDER_INPUT {
 type WORK_ORDERS_TYPE : db.WORK_ORDERS {};
 ```
 
-- Los nombres de tipo en `PascalCase`.
+- Los nombres de tipo en `camelCase`.
 - Para pasar como parámetro el contenido completo de una entidad, usar el patrón `type <Nombre>_TYPE : db.<ENTIDAD> {};`.
 - Para tipos de retorno complejos con arrays anidados, declarar tipos intermedios.
 

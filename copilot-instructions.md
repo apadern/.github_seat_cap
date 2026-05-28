@@ -34,7 +34,8 @@ Organizar la solución con estructura CAP estándar:
 
 ## 5. Servicios y handlers (Node.js)
 - Implementar handlers con responsabilidad única.
-- Separar validación, transformación y acceso a datos en funciones pequeñas.
+- **No definir funciones en el fichero `srv/<serviceName>.js`**; toda la lógica debe residir en la clase lib (`srv/lib/<serviceName>Mng.js`). El fichero de servicio solo contiene: declaración de conexiones, instanciación de la lib y registro de handlers.
+- Separar validación, transformación y acceso a datos en funciones pequeñas dentro de la clase lib.
 - Reutilizar lógica común en `srv/lib/`.
 - Usar APIs CAP (`cds`) de forma idiomática y consistente.
 - Gestionar errores de forma explícita, con mensajes claros y accionables.
@@ -46,6 +47,22 @@ Organizar la solución con estructura CAP estándar:
 - Agrupar lecturas/escrituras cuando sea posible.
 - Respetar el contexto transaccional de CAP (`cds.transaction(req)` cuando aplique).
 - Diseñar operaciones idempotentes en escenarios de reintento.
+- Diferenciar los dos modelos de transacción:
+  - `cds.transaction(req)`: CAP gestiona commit y rollback automáticamente al final del request.
+  - `db.tx()`: transacción manual; **siempre** cerrar con `await tx.commit()` o `await tx.rollback()` dentro de un bloque `try/catch/finally`, incluso en operaciones de solo lectura. No hacerlo deja la conexión abierta.
+
+```js
+// ✅ Correcto: tx manual con cierre garantizado
+let tx;
+try {
+    tx = await db.tx();
+    await tx.run(INSERT.into(entityName).entries(oData));
+    await tx.commit();
+} catch (err) {
+    if (tx) await tx.rollback();
+    throw err;
+}
+```
 
 ## 7. Validación y seguridad
 - Validar entradas de acciones/funciones/eventos antes de procesar.

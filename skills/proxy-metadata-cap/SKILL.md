@@ -113,7 +113,6 @@ beforeAllRequests(req, noProxy) {
  * @param {Boolean} noProxy - Omitir consulta de proxy / Skip proxy lookup
  * @author NTTData
  * @returns {Promise<String>}
- * @public
  */
 getUserId(req, noProxy) {
     return new Promise((resolve, reject) => {
@@ -175,7 +174,6 @@ const jwtDecode = require('jwt-decode').jwtDecode;
  * @method getProxy
  * @author NTTData
  * @returns {Promise<Object>}
- * @public
  */
 getProxy() {
     return new Promise((resolve, reject) => {
@@ -204,7 +202,6 @@ getProxy() {
  * @param {Object} req - Objeto request de CAP / CAP request object
  * @author NTTData
  * @returns {String}
- * @public
  */
 getRealUserId(req) {
     let userId = req?.req?.user?.id;

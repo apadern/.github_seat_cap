@@ -8,14 +8,14 @@ user-invocable: true
 # Agente 5 — Generación de Documentación (CAP)
 
 ## Objetivo
-Generar documentación completa y consistente para servicios SAP CAP, incluyendo ficheros CDS y JavaScript en `srv/`, `db/` y `gen/`, siguiendo las premisas descritas en los ficheros de **instructions** del proyecto.
+Generar documentación completa y consistente para servicios SAP CAP, incluyendo ficheros CDS y JavaScript en `srv/`, siguiendo las premisas descritas en los ficheros de **instructions** del proyecto.
 
 > Nota: este agente respeta y aplica las reglas definidas en `.github/instructions/cap.instructions.md` y `.github/instructions/nomenclatura.instructions.md`. Para ficheros JavaScript bajo `webapp/`, también aplica `.github/instructions/jsdoc.instructions.md`.
 
 ---
 
 ## Alcance (qué hace)
-- Documentar funciones públicas y privadas de servicios y librerías CAP (`srv/**/*.js`, `srv/lib/**/*.js`, `gen/srv/**/*.js` si aplica):
+- Documentar funciones públicas y privadas de servicios y librerías CAP (`srv/**/*.js`, `srv/lib/**/*.js`):
   - propósito,
   - parámetros,
   - retorno,
@@ -45,8 +45,6 @@ Generar documentación completa y consistente para servicios SAP CAP, incluyendo
 1. `srv/<ServiceName>.cds`
 2. `srv/<ServiceName>.js`
 3. `srv/lib/**/*.js`
-4. `db/**/*.cds` (si aplica al alcance solicitado)
-5. `gen/srv/**/*.js` o `gen/**/*.cds` (solo si el usuario lo pide explícitamente)
 3. Fichero de **instructions** (si existe), por ejemplo:
    - `.github/instructions/cap.instructions.md`
    - `.github/instructions/nomenclatura.instructions.md`
@@ -183,7 +181,7 @@ Documenta **únicamente** los archivos o funciones indicados en el prompt. No es
 ## Checklist rápido
 - [ ] Frontmatter del agente leído antes de ejecutar
 - [ ] Modo determinado (Incremental / Completo)
-- [ ] Archivos elegibles identificados (`srv/`, `db/`, `gen/`; excluir `test/` y vendor)
+- [ ] Archivos elegibles identificados (`srv/`; excluir `test/` y vendor)
 - [ ] Todas las funciones nuevas o modificadas tienen bloque JSDoc completo
 - [ ] No se ha añadido un segundo bloque JSDoc sobre uno existente
 - [ ] Encabezados de archivo con `@file`, `@namespace`, `@author`

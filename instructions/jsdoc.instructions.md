@@ -1,9 +1,9 @@
 ---
-applyTo: '**/srv/**/*.js,**/gen/srv/**/*.js,**/db/**/*.js'
+applyTo: '**/srv/**/*.js'
 ---
 
 ## Documentación
-**Descripción general**: Toda la documentación del código en los ficheros JavaScript propios del backend SAP CAP se realizará mediante anotaciones JSDoc y comentarios inline cuando sean necesarios. Esta guía aplica a código en `srv/`, `srv/lib/`, `srv/handlers/` (si existe), `gen/srv/` y cualquier JavaScript propio relacionado con lógica CAP. Es necesario actualizar la documentación después de cada corrección o modificación en el código, actualizando la etiqueta `@memberof` con el valor de la etiqueta `@namespace` al inicio del archivo JavaScript.
+**Descripción general**: Toda la documentación del código en los ficheros JavaScript propios del backend SAP CAP se realizará mediante anotaciones JSDoc y comentarios inline cuando sean necesarios. Esta guía aplica a código en `srv/`, `srv/lib/`, `srv/handlers/` (si existe) y cualquier JavaScript propio relacionado con lógica CAP. Es necesario actualizar la documentación después de cada corrección o modificación en el código, actualizando la etiqueta `@memberof` con el valor de la etiqueta `@namespace` al inicio del archivo JavaScript.
 
 **Nota:** La librería `jsdoc` **no es obligatoria** en el repositorio. Si `jsdoc` no está instalada en el módulo, las instrucciones siguientes siguen siendo válidas si se usa `npx jsdoc` o si se instala `jsdoc` como dependencia de desarrollo. Más abajo se muestran ejemplos de ambos enfoques.
 
@@ -15,7 +15,7 @@ applyTo: '**/srv/**/*.js,**/gen/srv/**/*.js,**/db/**/*.js'
   //English description part 1,
   //part 2
   ```
-- La documentación se aplica a **todos** los ficheros JavaScript propios del backend CAP (por ejemplo en `srv/`, `srv/lib/`, `gen/srv/`), independientemente de la subcarpeta, **excepto** los ficheros de terceros (vendor), los que estén dentro de carpetas `test/`, ficheros `*.test.js`, snapshots y artefactos transitorios. Se consideran vendor aquellos ficheros no escritos por el equipo del proyecto; la forma más fiable de identificarlos es configurar `source.excludePattern` en `jsDocConf.json` para excluirlos.
+- La documentación se aplica a **todos** los ficheros JavaScript propios del backend CAP (por ejemplo en `srv/`, `srv/lib/`), independientemente de la subcarpeta, **excepto** los ficheros de terceros (vendor), los que estén dentro de carpetas `test/`, ficheros `*.test.js`, snapshots y artefactos transitorios. Se consideran vendor aquellos ficheros no escritos por el equipo del proyecto; la forma más fiable de identificarlos es configurar `source.excludePattern` en `jsDocConf.json` para excluirlos.
 - Al inicio del archivo JavaScript, se añadirá un comentario con las etiquetas `@file`, `@namespace` y `@author`. La etiqueta `@namespace` será el nombre lógico del módulo CAP (normalmente nombre de fichero sin extensión o nombre del servicio/lib) y la etiqueta `@author` siempre será 'NTTData'. No usar las etiquetas `@lends`. Usar `@namespace` a nivel de archivo y `@memberof` + `@method` a nivel de función para que cada función se indexe correctamente bajo el namespace del archivo.
 
 Ejemplo:
@@ -36,12 +36,11 @@ Ejemplo:
       /**
        * @memberof horasExtraService
        * @method validateOvertimePayload
-       * @public
        */
       ```
 
 - Cada una de las funciones del servicio o librería se comentará mediante anotaciones. Los comentarios solo se generarán antes de la declaración de la función; no se generarán automáticamente en medio de la misma.
-Siempre se añadirán las etiquetas `@description`, `@memberof`, `@method`, `@author` y `@public`/`@private`. Si corresponde, también se añadirán las etiquetas `@async`, `@param`, `@returns` y `@throws`. 
+Siempre se añadirán las etiquetas `@description`, `@memberof`, `@method` y `@author`. Si corresponde, también se añadirán las etiquetas `@async`, `@param`, `@returns` y `@throws`. 
   - Las etiquetas JSDoc bilingües (como `@description`, `@param`, `@returns`) que superen ~80 caracteres se dividirán en varias líneas usando el mismo patrón que los comentarios inline: primero las líneas en español y luego las líneas en inglés, usando ` /` al final de la última línea española como separador. Ejemplo:
     ```js
     /**
@@ -67,7 +66,6 @@ Ejemplo de una función con parámetros de entrada y un valor de retorno:
     * @param {Object} oPayload - Datos de entrada / Input payload
     * @author NTTData
     * @returns {Boolean}
-    * @private
     */
   ```
 

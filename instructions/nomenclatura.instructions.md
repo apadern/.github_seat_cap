@@ -38,10 +38,10 @@ service workOrderService {
 Ejemplo: `submitOrder`, `calculateOvertime`, `validatePayload`.
 
 ## 4. Tipos y aspectos CDS
-- Formato: `PascalCase`.
+- Formato: `camelCase`.
 - Deben nombrar claramente el concepto o comportamiento reutilizable.
 
-Ejemplo: `StatusType`, `Auditable`, `AddressInfo`.
+Ejemplo: `statusType`, `auditable`, `addressInfo`.
 
 ## 5. Campos de entidad
 - Formato: `camelCase`.
@@ -85,9 +85,27 @@ Ejemplo: `srv/horasExtraService.cds` y `srv/horasExtraService.js`.
 
 ## 12. Nombres de ficheros JS
 - Servicios y módulos funcionales: `camelCase.js`.
-- Clases exportables: `PascalCase.js`.
 
-Ejemplo: `horasExtraService.js`, `horasExtraLib.js`, `ErrorHandler.js`.
+Ejemplo: `horasExtraService.js`, `horasExtraLib.js`.
+
+## 12.1. Definición y exportación de clases JS
+- Las clases se exportan directamente con `module.exports =` seguido del bloque JSDoc y la declaración `class`.
+- El nombre de la clase usa `camelCase` y debe describir el ámbito del servicio o módulo que gestiona.
+
+```js
+module.exports =
+
+    /**
+     * Se exportan los métodos que va a utilizar el fichero proceduresService.js
+     * para realizar las operaciones de las funciones/acciones para el servicio
+     * procedures-service-ext
+     *
+     * @namespace proceduresExtMng
+     */
+    class proceduresExtMng {
+        // ...
+    };
+```
 
 ## 13. Rutas OData (`@path`)
 - Formato: `kebab-case`.
@@ -99,3 +117,18 @@ Ejemplo: `@path: 'horas-extra'`.
 - Unitarios de librería: `[nombreLib].test.js`.
 - Integración de servicio: `[nombreServicio].dynamic.test.js`.
 - Datos de prueba: `[nombreServicio]Cases.js`.
+
+## 15. Códigos de error en `req.error` y `req.reject`
+- Formato: `UPPER_SNAKE_CASE`, sin espacios.
+- Deben ser códigos técnicos reconocibles y traducibles desde el front.
+- No usar mensajes literales en lenguaje natural directamente.
+
+```js
+// ❌ Mal: mensaje literal no traducible
+req.error(400, 'El proyecto no existe');
+
+// ✅ Bien: código técnico traducible desde front
+req.error(400, 'PROJECT_NOT_FOUND');
+req.reject(403, 'USER_NOT_AUTHORIZED');
+req.error(422, 'INVALID_BUDGET_AMOUNT');
+```
