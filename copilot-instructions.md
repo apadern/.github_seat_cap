@@ -7,7 +7,7 @@ Este documento define pautas para generar y mantener código orientado exclusiva
 
 - El foco es backend CAP: modelos CDS, servicios y handlers en Node.js.
 - Ámbito principal: `db/**`, `srv/**`, `gen/**`, `*.cds`.
-- Responder siempre en español.
+- Responder siempre en español (respuestas al usuario; los comentarios de código siguen el patrón bilingüe definido en la sección 2).
 - Añadir comentarios solo cuando aporten contexto no evidente.
 
 ## 2. Idioma y nomenclatura

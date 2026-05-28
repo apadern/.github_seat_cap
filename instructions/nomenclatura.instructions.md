@@ -19,13 +19,13 @@ entity WorkOrders : cuid, managed {
 ```
 
 ## 2. Servicios CDS
-- Formato: `PascalCase` con sufijo `Service`.
+- Formato: `camelCase` con sufijo `Service`.
 - La anotación `@path` usa `kebab-case`.
 
 Ejemplo:
 ```cds
 @path: 'work-order-service'
-service WorkOrderService {
+service workOrderService {
     entity WorkOrders as projection on db.WorkOrders;
 }
 ```
