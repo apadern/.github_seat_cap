@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: '**/*.cds,**/srv/**/*.js,**/db/**,**/gen/**'
 ---
 
 ## 1. Objetivo y alcance (SAP CAP)

@@ -21,6 +21,7 @@ Implementar el modelo de datos CDS (`db/schema.cds`), las definiciones de servic
 - Definir constantes de entidad técnica al inicio del fichero lib (`entityName<Tabla> = "<namespace>.<TABLA>"`).
 - Registrar logs ITS en acciones que crean, modifican o eliminan datos.
 - Crear ficheros `.http` en `srv/calls/` para probar cada nueva función o acción.
+- Si el proyecto ya tiene un `README.md` descriptivo (arquitectura, entidades, servicios), actualizarlo con las entidades/servicios/acciones añadidos o modificados en esta tarea (ver paso final del Procedimiento).
 
 ---
 
@@ -30,6 +31,7 @@ Implementar el modelo de datos CDS (`db/schema.cds`), las definiciones de servic
 - Configurar la activación OData V2 ni servicios externos en `package.json` (Agente_configuracion_inicial).
 - Generar o actualizar documentación JSDoc (Agente_documentacion).
 - Crear artefactos de personalización de Copilot (Agente_customizacion).
+- No crea el `README.md` descriptivo del proyecto si no existe — solo lo actualiza cuando ya existe (su creación corresponde a `Agente_descripcion_tecnica` durante el análisis previo).
 
 ---
 
@@ -51,6 +53,7 @@ Implementar el modelo de datos CDS (`db/schema.cds`), las definiciones de servic
 - `srv/<serviceName>.js` con los nuevos handlers registrados.
 - `srv/lib/<serviceName>Mng.js` con el método de negocio implementado en la clase.
 - `srv/calls/<nombreFuncionOAccion>.http` con el fichero de prueba HTTP.
+- `README.md` actualizado con lo nuevo, **solo si ya existía** en el proyecto.
 
 ```json
 {
@@ -60,17 +63,19 @@ Implementar el modelo de datos CDS (`db/schema.cds`), las definiciones de servic
     "srv/communicationtoolcap-srv.cds",
     "srv/communicationtoolcap-srv.js",
     "srv/lib/communicationtoolcapMng.js",
-    "srv/calls/getNombreFuncion.http"
+    "srv/calls/getNombreFuncion.http",
+    "README.md"
   ],
   "notes": [
     "Tipo creado en sección //TYPES del .cds",
-    "Handler registrado en .js con try/catch y beforeAllRequests"
+    "Handler registrado en .js con try/catch y beforeAllRequests",
+    "README.md actualizado: añadida la nueva entidad y la acción en el mapa de servicios"
   ],
   "todos": [
     "Revisar si la acción debe registrar log ITS y completar el bloque registerITSLOG",
     "Añadir fichero .http de prueba si aún no existe"
   ],
-  "metrics": { "filesTouched": 5, "warnings": 0 }
+  "metrics": { "filesTouched": 6, "warnings": 0 }
 }
 ```
 
@@ -81,7 +86,8 @@ Implementar el modelo de datos CDS (`db/schema.cds`), las definiciones de servic
 ### 1 — Leer contexto del proyecto (obligatorio)
 
 Antes de modificar cualquier fichero:
-- Leer `db/schema.cds` para conocer el namespace y las entidades existentes.
+- Comprobar si existe `README.md` en la raíz del proyecto con contenido propio (no el boilerplate de `cds init`). Si existe, leerlo primero: da el mapa de namespace, entidades, servicios y convenciones propias del proyecto, y permite acotar qué partes de `schema.cds`/`.cds`/`.js`/lib hace falta leer en detalle para esta tarea en concreto, en vez de releerlos enteros desde cero. Anotar también sus secciones para poder actualizarlas en el paso final.
+- Leer `db/schema.cds` para conocer el namespace y las entidades existentes (si el README ya lo resume, usarlo para localizar directamente la zona relevante en vez de leer el fichero completo).
 - Leer `srv/<serviceName>.cds` para conocer las proyecciones, funciones, acciones y tipos ya declarados.
 - Leer `srv/<serviceName>.js` para conocer las conexiones CDS instanciadas y los handlers existentes.
 - Leer `srv/lib/<serviceName>Mng.js` para conocer los métodos y constantes ya definidos.
@@ -456,6 +462,11 @@ Content-Type: application/json
 
 > El prefijo `/v2/` aplica cuando el proyecto usa el enfoque legacy de OData V2. Con `cov2ap` moderno el prefijo es `/odata/v2/`. Revisar `package.json` del proyecto para determinar cuál aplica.
 
+### 7 — Actualizar `README.md` (solo si ya existía)
+
+- Si el paso 1 detectó un `README.md` con contenido propio, actualizar únicamente las secciones afectadas por esta tarea: nuevas entidades en el mapa de datos, nuevas acciones/funciones (sección "Acciones y funciones principales" si existe, con una línea por entrada, sin duplicar el JSDoc de la función), nuevas integraciones/destinations (sección "Servicios externos e integraciones" si existe), o la convención de nombres/prefijo OData si esta tarea la fija por primera vez (sección "Convenciones propias de este proyecto" si existe). Si en esta tarea se resolvió explícitamente una decisión de arquitectura con trade-offs (confirmada en la descripción técnica de origen), añadirla como una línea en "Decisiones de arquitectura ya resueltas" si esa sección existe. Solo se añade lo que ya ha quedado realmente implementado en los pasos 2-6 de este mismo procedimiento, nunca trabajo pendiente, parcial o un TODO anotado para más adelante. No reescribir el resto del fichero ni añadir secciones opcionales que no tenía si no aportan nada nuevo en esta tarea.
+- Si el proyecto no tenía `README.md` propio, no crearlo — queda fuera del alcance de este agente (ver "Fuera de alcance").
+
 ---
 
 ## Variantes técnicas
@@ -536,6 +547,10 @@ Content-Type: application/json
 - [ ] Punto y coma al final de cada sentencia JS.
 - [ ] Ninguna credencial o URL hardcodeada; usar variables de entorno o Destination de BTP.
 
+### README.md
+- [ ] Si el proyecto ya tenía `README.md` propio, se actualizó con las entidades/servicios/acciones nuevos de esta tarea.
+- [ ] Si el proyecto no tenía `README.md` propio, no se ha creado uno (fuera de alcance de este agente).
+
 ---
 
 ## Convenciones recomendadas
@@ -557,7 +572,7 @@ Content-Type: application/json
 
 ## Checklist rápido
 
-- [ ] Contexto leído: `db/schema.cds`, `.cds` del servicio, `.js` del servicio, clase lib
+- [ ] Contexto leído: `db/schema.cds`, `.cds` del servicio, `.js` del servicio, clase lib, y existencia/contenido de `README.md`
 - [ ] Namespace CDS identificado y respetado en constantes de entidad técnica
 - [ ] Entidad/función/acción declara en el `.cds` con el tipo de seguridad correcto
 - [ ] Tipos personalizados en sección `//TYPES` del `.cds`
@@ -566,4 +581,5 @@ Content-Type: application/json
 - [ ] Lógica de negocio en la clase lib, no en el handler
 - [ ] Queries CQL nativas; sin SQL directo ni `SELECT *` innecesario
 - [ ] Fichero `.http` de prueba creado en `srv/calls/`
+- [ ] `README.md` actualizado si ya existía, no creado si no existía
 - [ ] Comentarios en español / inglés; indentación Tab Size 4; punto y coma JS

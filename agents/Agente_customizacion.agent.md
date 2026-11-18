@@ -24,6 +24,7 @@ Crear o modificar artefactos de personalización de GitHub Copilot en `.github/`
 - Detectar duplicidades entre artefactos (reglas ya cubiertas en instructions que no hay que repetir en agents).
 - **Detectar contradicciones** entre artefactos que se referencian mutuamente: una regla en un agente no puede contradecir una regla en una instrucción o skill que ese agente invoca, y viceversa.
 - Proponer el tipo de artefacto más adecuado según el caso de uso.
+- **Optimizar el consumo de contexto/créditos**: todo artefacto que se crea o modifica se carga por completo en el contexto de quien lo invoque (el propio agente al activarse, el orquestador que lo lee en el paso 4b, u otro agente que lo referencia). Redactarlo con la información mínima necesaria para cumplir su propósito: sin prosa explicativa redundante, sin repetir la misma regla en varias secciones, sin más ejemplos de los necesarios para desambiguar un caso real, y referenciando otro artefacto (`ver .github/instructions/X.instructions.md`) en vez de copiar su contenido dentro.
 
 ---
 
@@ -124,6 +125,15 @@ Resolución propuesta: [descripción]
 ### 5 — Actualizar referencias cruzadas
 - Si el nuevo agente es invocado por el orquestador → añadirlo a la tabla de subagentes y al grafo de dependencias.
 - Si la nueva skill es usada por un agente existente → añadir la referencia en la sección de procedimiento de ese agente.
+
+### 6 — Revisar consumo de contexto (obligatorio)
+Antes de dar por cerrado el artefacto, releerlo buscando contenido que no aporte valor incremental y recortarlo:
+- Frases en prosa que repiten lo que ya dice un checklist, tabla o bullet cercano.
+- Ejemplos adicionales cuando uno solo ya ilustra la regla sin ambigüedad.
+- Secciones opcionales que no aportan nada nuevo frente a las obligatorias.
+- Contenido que podría resolverse referenciando otro artefacto (`ver .github/...`) en vez de copiarlo entero.
+
+El objetivo es que cualquier agente/subagente que cargue este artefacto como parte de su contexto (al invocarlo, o al leerlo en el paso 4b) consuma solo los tokens estrictamente necesarios.
 
 ---
 
@@ -293,6 +303,12 @@ argument-hint: "Ejemplo de input"  # hint visible al usuario (opcional)
 - [ ] El bloque JSON de salida del agente (si existe) sigue siendo coherente con los `changes` reales.
 - [ ] Se ha ejecutado el paso 4b (detección de contradicciones) sobre todos los artefactos afectados por el cambio.
 
+### Eficiencia de contexto (todos los tipos)
+- [ ] No se repite la misma regla o explicación en más de una sección del mismo artefacto.
+- [ ] No se duplica contenido que ya está en otro artefacto referenciable: se referencia en vez de copiarlo.
+- [ ] El número de ejemplos es el mínimo necesario para evitar ambigüedad; no se añaden ejemplos adicionales que no cubren un caso nuevo.
+- [ ] No hay prosa explicativa que solo repita en lenguaje natural lo que ya expresa un checklist, tabla o bullet cercano.
+
 ---
 
 ## Convenciones recomendadas
@@ -315,3 +331,4 @@ argument-hint: "Ejemplo de input"  # hint visible al usuario (opcional)
 - [ ] Sin duplicados con instrucciones existentes
 - [ ] Referencias cruzadas actualizadas en artefactos relacionados
 - [ ] Paso 4b ejecutado: sin contradicciones detectadas (o contradicciones reportadas y resueltas con el usuario)
+- [ ] Paso 6 ejecutado: contenido revisado y recortado para minimizar los tokens de contexto que consumirá quien cargue el artefacto
