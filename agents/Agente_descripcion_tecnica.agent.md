@@ -44,7 +44,7 @@ Redactar el bloque de **Descripción técnica** de una tarea de evolutivo SAPUI5
 - Citar número de línea únicamente cuando se haya verificado leyendo el fichero real con `read_file`; si no puede precisarse con fiabilidad, omitir el número en vez de inventarlo.
 - Reproducir el **formato exacto** visto en los 6 ejemplos aprobados (sección "Ejemplos de referencia"): encabezados en negrita `**FRONT:**`/`**FRONT <App>:**`, `**DB:**`, `**BACK:**`/`**BACK <Servicio>:**` (cada uno solo cuando la tarea toca esa parte y ésta es accesible/analizable en el repo), listas con viñetas y sub-viñetas con pasos concretos y accionables.
 - No incluir secciones adicionales no solicitadas (nada de "Objetivo", "Alcance", "Consideraciones UX/Accesibilidad", "Testing"...) salvo que el propio ejemplo aprobado las incluya.
-- Si tras explorar el código quedan ambigüedades bloqueantes (proyecto no localizado, campo/entidad no identificable, varias interpretaciones posibles del alcance), preguntar al usuario de forma breve y concreta **antes** de entregar la versión final. Priorizar siempre resolver explorando el código antes de preguntar.
+- **Puerta de dudas (obligatoria, en todos los modos):** si tras explorar el código queda cualquier duda que afecte al texto (proyecto no localizado, campo/entidad no identificable, varias interpretaciones del alcance, decisiones de arquitectura, código oficial vs. prototipo, pasos marcados como `[PENDIENTE DE CONFIRMAR]` o equivalentes), **no entregar la Descripción técnica**. Entregar únicamente las preguntas concretas al usuario y esperar sus respuestas; solo tras recibirlas se redacta y entrega la descripción. Priorizar siempre resolver explorando el código antes de preguntar.
 - Usar `.github/instructions/nomenclatura.instructions.md` como fuente de verdad adicional para proponer nombres de métodos/variables/claves i18n coherentes con el proyecto, sin repetir su contenido dentro de este agente.
 - Consultar `@ui5/mcp-server` (guidelines, api_reference, project_info) cuando haga falta confirmar una API o convención de SAPUI5, y `@cap-js/mcp-server` (search_model, search_docs) cuando el proyecto tenga backend CAP y haga falta localizar una entidad/acción del modelo CDS.
 - **Lectura de documentos funcionales adjuntos (.docx):** si la descripción funcional se entrega como fichero `.docx` en lugar de texto, usar la skill `docx` del proyecto (`.github/skills/docx/`) para extraerlo a texto plano/Markdown. Esto implica invocar `execute` **únicamente** para ejecutar comandos de conversión de solo lectura (p. ej. `pandoc --track-changes=all <fichero>.docx -o /tmp/<nombre>.md`, o `python scripts/office/unpack.py <fichero>.docx /tmp/<nombre>_unpacked/` si hace falta inspeccionar el XML interno), escribiendo siempre la salida en una ruta temporal (`/tmp/...`) fuera del repositorio, nunca sobre el propio `.docx` original ni sobre ningún fichero del proyecto. Tras extraer el texto, leerlo con `read`/`view` como cualquier otra descripción funcional.
@@ -73,7 +73,8 @@ Redactar el bloque de **Descripción técnica** de una tarea de evolutivo SAPUI5
 ---
 
 ## Salidas (artefactos)
-- El texto Markdown de la **Descripción técnica**, con el formato visto en los ejemplos (`**FRONT:**` / `**FRONT <App>:**` / `**DB:**` / `**BACK:**` / `**BACK <Servicio>:**`, o sin encabezados cuando el cambio backend es un único bloque cohesionado, viñetas y sub-viñetas), listo para pegar en la herramienta de gestión de tareas.
+- **Con dudas pendientes**, la única salida es la lista numerada de preguntas al usuario, con el JSON estándar con `status: "warning"`, `changes: []` y las preguntas en `todos`; no se incluye ninguna Descripción técnica.
+- **Sin dudas pendientes**, el texto Markdown de la **Descripción técnica**, con el formato visto en los ejemplos (`**FRONT:**` / `**FRONT <App>:**` / `**DB:**` / `**BACK:**` / `**BACK <Servicio>:**`, o sin encabezados cuando el cambio backend es un único bloque cohesionado, viñetas y sub-viñetas), listo para pegar en la herramienta de gestión de tareas.
 - **Ningún fichero de la aplicación se crea ni se modifica**, salvo la excepción explícita del `README.md` descriptivo del proyecto cuando faltaba: `changes` es `[]` en el caso general, o `["README.md"]` cuando este agente lo ha creado por no existir previamente.
 - **Output JSON estándar** para el orquestador (o para registro de la sesión si se invoca directamente):
 
@@ -127,10 +128,10 @@ Ejemplo equivalente para una tarea backend CAP, con creación del `README.md` po
 4. **Identificar el alcance real de bloques a redactar.** Si la funcional afecta a varias apps/microfrontends, preparar un bloque `**FRONT <NombreApp> (<descripción breve>):**` por cada una. Si afecta a varios servicios/módulos CAP independientes, preparar un bloque `**BACK <NombreServicio>:**` por cada uno. Determinar todo esto mediante exploración, nunca asumiendo.
 5. **Buscar el patrón/feature ya existente más análogo** dentro del propio proyecto como plantilla de implementación: mismo tipo de campo condicional, mismo tipo de botón con visibilidad condicionada, misma llamada a backend, mismo tipo de diálogo o fragment, o misma estructura de tabla/vista CDS, acción/función o clase `srv/lib/`. Usar `grep`/`textSearch` por nombres de método, bindings, fragmentos o entidades similares a los que necesitará el nuevo desarrollo.
 6. **Redactar la descripción técnica** reproduciendo el formato de los 6 ejemplos y las reglas de "Convenciones recomendadas" (rutas relativas, nombres exactos entre backticks, línea solo si verificada); referenciar siempre el patrón análogo localizado en el paso 5 ("usar de ejemplo...", "igual que se hace hoy en día para...").
-7. **Resolver ambigüedades bloqueantes.** Si after explorar el código quedan puntos que no pueden determinarse (entidad no localizada, alcance con varias interpretaciones, proyecto no encontrado), formular al usuario una pregunta breve y concreta antes de cerrar la versión final. No bloquear por dudas menores que puedan documentarse como supuesto en `notes`.
+7. **Resolver ambigüedades bloqueantes (puerta de dudas).** Si tras explorar el código quedan puntos que no pueden determinarse (entidad no localizada, alcance con varias interpretaciones, proyecto no encontrado, decisiones abiertas), formular al usuario una lista numerada de preguntas breves y concretas y **detenerse**: no redactar ni entregar la Descripción técnica hasta recibir sus respuestas. No bloquear por dudas menores que puedan documentarse como supuesto en `notes`. Tras cada respuesta, volver a evaluar si quedan dudas; si no quedan, continuar con el paso 8.
 8. **Comprobar/preparar el `README.md` descriptivo del proyecto.** Con lo ya explorado en el paso 3, comprobar si `README.md` existe en la raíz del proyecto con contenido propio. Si no existe o solo tiene el boilerplate de scaffolding, crearlo siguiendo la plantilla de "Fichero descriptivo del proyecto (README.md)". Si ya existe con contenido propio, no tocarlo.
 9. **Si es una corrección** (hay entregas previas de esta misma descripción técnica en la conversación), releer todas las correcciones ya aplicadas —no solo la última— antes de redactar la versión final, aplicando "No reintroducir elementos ya descartados" y "No mezclar contenido de un evolutivo distinto" (ver Alcance). Partir literalmente de la última versión entregada y aplicarle solo el delta pedido en este turno: todo punto no mencionado en la corrección se copia tal cual, sin resumir ni condensar ("No resumir ni omitir contenido no afectado por una corrección", ver Alcance). Antes de entregar, comparar punto por punto la nueva versión contra la anterior para confirmar que no ha desaparecido ningún detalle no solicitado. Ante la duda, preguntar en vez de asumir.
-10. **Entregar el texto final** bajo el encabezado `**Descripción técnica:**` + el bloque JSON estándar (incluyendo `README.md` en `changes` solo si se ha creado en el paso 8). No tocar ningún otro fichero del proyecto analizado en ningún momento del proceso.
+10. **Entregar el texto final** (solo si no quedan dudas pendientes; ver paso 7) bajo el encabezado `**Descripción técnica:**` + el bloque JSON estándar (incluyendo `README.md` en `changes` solo si se ha creado en el paso 8). No tocar ningún otro fichero del proyecto analizado en ningún momento del proceso.
 
 ---
 
@@ -420,7 +421,9 @@ Se solicita registrar y notificar las incidencias de envío de correo (caída de
 |---|---|
 | Cambio acotado, un único patrón análogo claro, sin decisiones de arquitectura abiertas (la mayoría de los 6 ejemplos de referencia) | **Completo**: entregar el texto final de una sola vez. |
 | Backlog con varias tareas relacionadas, o tarea con varios puntos independientes que el usuario quiere validar por separado | **Incremental por tarea**: redactar y entregar una tarea a la vez, esperando confirmación explícita antes de pasar a la siguiente. |
-| Tarea con al menos una decisión de arquitectura con trade-offs reales (seguridad, rendimiento, topología de despliegue — ver "Alcance") | **Incremental por bloque**: no cerrar ese bloque del texto hasta que el usuario confirme explícitamente la opción elegida; el resto de bloques sin decisiones abiertas puede entregarse en modo completo. |
+| Tarea con al menos una decisión de arquitectura con trade-offs reales (seguridad, rendimiento, topología de despliegue — ver "Alcance") | **Con puerta de dudas**: primero se entregan solo las preguntas; la descripción se entrega cuando el usuario haya respondido a todas. |
+
+La puerta de dudas ("Alcance" y paso 7 del procedimiento) prevalece sobre cualquier modo: mientras haya dudas sin respuesta, no se entrega la descripción técnica.
 
 En modo incremental, cada entrega parcial sigue llevando el mismo nivel de detalle y formato que el texto final (no es un borrador reducido): lo único que cambia es el punto en el que se pide confirmación antes de continuar.
 
@@ -457,6 +460,7 @@ En modo incremental, cada entrega parcial sigue llevando el mismo nivel de detal
 - [ ] Si `README.md` ya existía con contenido propio, no se ha tocado.
 - [ ] Si se ha creado el `README.md` en esta misma tarea, solo documenta lo ya existente en el código explorado, nunca la entidad/acción/vista nueva que esta tarea está describiendo en la Descripción técnica.
 - [ ] Las ambigüedades bloqueantes se preguntaron al usuario en vez de inventarse una interpretación.
+- [ ] Con dudas pendientes, no se entregó ninguna Descripción técnica: solo las preguntas, y el texto se entregó tras las respuestas del usuario.
 
 ---
 
@@ -482,6 +486,6 @@ En modo incremental, cada entrega parcial sigue llevando el mismo nivel de detal
 - [ ] Sin referencias a otras tarjetas del backlog; sin contenido arrastrado de otro evolutivo ya cerrado
 - [ ] Corrección: contenido previo íntegro conservado (solo se aplicó el delta pedido, comparado punto por punto contra la versión anterior, sin resumir)
 - [ ] Si es corrección: ningún elemento ya descartado en rondas previas reaparece en el texto
-- [ ] Ambigüedades bloqueantes preguntadas al usuario (si las hubo)
+- [ ] Dudas pendientes: si las hay, solo se entregan preguntas y la descripción espera a las respuestas (puerta de dudas)
 - [ ] `README.md` comprobado: creado solo si faltaba/boilerplate, sin incluir la novedad de esta tarea; sin tocar si ya existía
 - [ ] `changes` coherente (`[]` o `["README.md"]`); Output JSON producido
